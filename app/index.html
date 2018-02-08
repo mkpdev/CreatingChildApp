@@ -373,6 +373,9 @@
     $scope.save = function(mvalues){
       console.log("My Form values", mvalues);
       $scope.multiplierInpt = false;
+      $scope.data = [
+        [0, 15, 35, 40, 45, 45, 48, 50, 54, 57, 58, 60, 65]
+      ];
       if(mvalues.timeFrame){
         if(mvalues.timeFrame == 1){
           $scope.labels = ["Jan"];
@@ -413,6 +416,9 @@
         }
       }else{
         $scope.labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        $scope.data = [
+          [0, 15, 35, 40, 45, 45, 48, 50, 54, 57, 58, 60, 65]
+        ];
       }
 
       $scope.myvalues = {growth_types_available: mvalues.growth, forecast_months_available: mvalues.options, 
