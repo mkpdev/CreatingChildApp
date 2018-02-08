@@ -190,7 +190,7 @@
               </div>
 
               <div class="form-group month_sectn">
-                <input type="text" class="form-control readonly month_input" name="currMonth" ng-model="myForm.periodicity" ng-disabled="!currentMonth">
+                <input type="text" class="form-control readonly month_input" name="currMonth" ng-model="myForm.periodicity" ng-disabled="!currMonth">
               </div>
               
               <div class="form-group">  
@@ -282,7 +282,7 @@
     $scope.myForm = {}; 
     $scope.labels =[];
     $scope.currentDate = false;
-    $scope.currentMonth = false;
+    $scope.currMonth = false;
     $scope.multiplierInpt = false;
     $scope.image = "menuicon.png";
     $scope.myForm.growth = [
@@ -306,7 +306,7 @@
     //slider configuration
     $scope.labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov","Dec"];
     $scope.data = [
-      [0, 20, 35, 42, 40, 38, 42, 58, 60, 62, 65, 78, 90]
+      [0, 15, 35, 40, 45, 45, 48, 50, 54, 57, 58, 60, 65]
     ];
     $scope.onClick = function (points, evt) {
       console.log(points, evt);
@@ -373,31 +373,43 @@
     $scope.save = function(mvalues){
       console.log("My Form values", mvalues);
       $scope.multiplierInpt = false;
-      if(mvalues.multiplier){
-        if(mvalues.multiplier == 1){
+      if(mvalues.timeFrame){
+        if(mvalues.timeFrame == 1){
           $scope.labels = ["Jan"];
-        }else if(mvalues.multiplier == 2){
+          $scope.data[0][0] = $scope.slider.maxValue;
+        }else if(mvalues.timeFrame == 2){
           $scope.labels = ["Jan", "Feb"];
-        }else if(mvalues.multiplier == 3){
+          $scope.data[0][1] = $scope.slider.maxValue;
+        }else if(mvalues.timeFrame == 3){
           $scope.labels = ["Jan", "Feb", "Mar"];
-        }else if(mvalues.multiplier == 4){
+          $scope.data[0][2] = $scope.slider.maxValue;
+        }else if(mvalues.timeFrame == 4){
           $scope.labels = ["Jan", "Feb", "Mar", "Apr"];
-        }else if(mvalues.multiplier == 5){
+          $scope.data[0][3] = $scope.slider.maxValue;
+        }else if(mvalues.timeFrame == 5){
           $scope.labels = ["Jan", "Feb", "Mar", "Apr", "May"];
-        }else if(mvalues.multiplier == 6){
+          $scope.data[0][4] = $scope.slider.maxValue;
+        }else if(mvalues.timeFrame == 6){
           $scope.labels = ["Jan", "Feb", "Mar", "Apr", "May", "June"];
-        }else if(mvalues.multiplier == 7){
+          $scope.data[0][5] = $scope.slider.maxValue;
+        }else if(mvalues.timeFrame == 7){
           $scope.labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July"];
-        }else if(mvalues.multiplier == 8){
+          $scope.data[0][6] = $scope.slider.maxValue;
+        }else if(mvalues.timeFrame == 8){
           $scope.labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug"];
-        }else if(mvalues.multiplier == 9){
+          $scope.data[0][7] = $scope.slider.maxValue;
+        }else if(mvalues.timeFrame == 9){
           $scope.labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep"];
-        }else if(mvalues.multiplier == 10){
+          $scope.data[0][8] = $scope.slider.maxValue;
+        }else if(mvalues.timeFrame == 10){
           $scope.labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct"];
-        }else if(mvalues.multiplier == 11){
+          $scope.data[0][9] = $scope.slider.maxValue;
+        }else if(mvalues.timeFrame == 11){
           $scope.labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov"];
-        }else if(mvalues.multiplier == 12){
+          $scope.data[0][10] = $scope.slider.maxValue;
+        }else if(mvalues.timeFrame == 12){
           $scope.labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+          $scope.data[0][11] = $scope.slider.maxValue;
         }
       }else{
         $scope.labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
