@@ -1,1 +1,326 @@
-<!doctype html> <html> <head> <meta charset="utf-8"> <title></title> <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> <!-- external js --> <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> <script type="text/javascript" src="scripts/mainCtrl.js"></script> <link rel="stylesheet" type="text/css" href="styles/main.3cba2cf3.css"> </head> <body ng-app="myApp"> <div ng-controller="MainController"> <div class="live cust-live"> <ol> <li ya-tree="child in data.children at ol" ng-class="{minimized:child.minimized}"> <div> <button data-toggle="modal" data-target="#myModal" class="btn btn-primary glyphicon" ng-click="clickFun(child, this)">+</button> </div> <ol ng-class="{pregnant:child.children.length}"></ol> <!-- bootstrap model --> <div class="modal fade" id="myModal" role="dialog"> <div class="modal-dialog"> <!-- Modal content--> <div class="modal-content"> <div class="modal-body"> <label class="modal-heading">Select element to add:</label><br> <div class="body-content"> <button type="button" data-dismiss="modal" aria-hidden="true" class="btn btn-info cust_condition_btn" id="condtnBtn" ng-click="btnSelected('condition')">Condition</button> <button type="button" data-dismiss="modal" aria-hidden="true" class="btn btn-info cust_action_btn" id="actionBtn" ng-click="btnSelected('action')">Action</button> </div> </div> </div> </div> </div> </li> </ol> </div> <div><button ng-click="getJson()">Json</button></div> <div>{{json}}</div> </div> </body> </html>
+<!doctype html> <html> <head> <meta charset="utf-8"> <title></title> <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> <!-- external js --> <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> <script type="text/javascript" src="scripts/mainCtrl.js"></script> <link rel="stylesheet" type="text/css" href="styles/main.3cba2cf3.css"> <style>.initial-plus-btn{
+      text-align: center;
+      margin-top: 50px;
+    }
+    .cust_condition_btn{
+      height: 80px;
+      width: 200px;
+      margin-right: 20px;
+      margin-bottom: 20px;
+      margin-top: 10px;
+    }
+    .cust_action_btn{
+      background-color: #ff69b4;
+      height: 80px;
+      width: 200px;
+      margin-bottom: 20px;
+      margin-top: 10px;
+    }
+    .cust_action_btn:hover{
+      background-color: #ff1493;
+    }
+    .body-cust_btns{
+      text-align: center;
+    }
+    .fade .modal-dialog{
+      width: 500px;
+    }
+    .cust-live{
+      text-align: center;
+    }
+    .modal-body{
+      text-align: center;
+    }
+    .modal-heading{
+      padding: 20px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 25px;
+      color:  #404040;
+    }
+    .modal-content{
+      height: 250px;
+      width: 530px;
+    }
+    .body-content{
+      padding: 10px 20px 10px 20px;
+    }
+    .type-1-parent{
+      background:red;   
+    }
+    .conditionText{
+      height: 50px;
+      width: 200px;
+      border-radius: 0px 20px;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    /*css for tree structure*/
+    .live ol {
+      padding-left: 0px;
+      padding-top: 20px;
+      position: relative;
+      transition: all 0.5s;
+      -webkit-transition: all 0.5s;
+      -moz-transition: all 0.5s;
+    }
+    .live li {
+      text-align: center;
+      list-style-type: none;
+      position: relative;
+      padding: 20px 50px 0 50px;
+      transition: all 0.5s;
+      -webkit-transition: all 0.5s;
+      -moz-transition: all 0.5s;
+      /*added for long names*/
+      
+      float: none;
+      display: inline-block;
+      vertical-align: top;
+      white-space: nowrap;
+      margin: 0 -2px 0 -2px;
+    }
+    .live li::before,
+    .live li::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 50%;
+      border-top: 1px solid #ccc;
+      width: 50%;
+      height: 20px;
+    }
+
+    .live li::after {
+      right: auto;
+      left: 50%;
+      border-left: 1px solid #ccc;
+    }
+    .live li:only-child::after,
+    .live li:only-child::before {
+      display: none;
+    }
+    .live li:only-child {
+      padding-top: 0;
+    }
+    .live li:first-child::before,
+    .live li:last-child::after {
+      border: 0 none;
+    }
+    .live li:last-child::before {
+      border-right: 1px solid #ccc;
+      border-radius: 0 5px 0 0;
+      -webkit-border-radius: 0 5px 0 0;
+      -moz-border-radius: 0 5px 0 0;
+    }
+    .live li:first-child::after {
+      border-radius: 5px 0 0 0;
+      -webkit-border-radius: 5px 0 0 0;
+      -moz-border-radius: 5px 0 0 0;
+    }
+    .live ol ol::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      border-left: 1px solid #ccc;
+      width: 0;
+      height: 20px;
+    }
+    .live li a {
+      border: 1px solid #ccc;
+      padding: 5px 10px;
+      text-decoration: none;
+      color: #666;
+      font-family: arial, verdana, tahoma;
+      font-size: 11px;
+      display: inline-block;
+      border-radius: 5px;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      transition: all 0.5s;
+      -webkit-transition: all 0.5s;
+      -moz-transition: all 0.5s;
+    }
+    .live li a:hover,
+    .live li a:hover+ol li a {
+      background: #c8e4f8;
+      color: #000;
+      border: 1px solid #94a0b4;
+    }
+    .live li a:hover+ul li::after,
+    .live li a:hover+ul li::before,
+    .live li a:hover+ul::before,
+    .live li a:hover+ul ul::before {
+      border-color: #94a0b4;
+    }</style> </head> <body ng-app="myApp"> <div ng-controller="MainController"> <div class="live cust-live"> <ol> <li ya-tree="child in data.children at ol" ng-class="{minimized:child.minimized}"> <div> <button data-toggle="modal" data-target="#myModal" class="btn btn-primary glyphicon" ng-click="clickFun(child, this)">+</button> </div> <ol ng-class="{pregnant:child.children.length}"></ol> <!-- bootstrap model --> <div class="modal fade" id="myModal" role="dialog"> <div class="modal-dialog"> <!-- Modal content--> <div class="modal-content"> <div class="modal-body"> <label class="modal-heading">Select element to add:</label><br> <div class="body-content"> <button type="button" data-dismiss="modal" aria-hidden="true" class="btn btn-info cust_condition_btn" id="condtnBtn" ng-click="btnSelected('condition')">Condition</button> <button type="button" data-dismiss="modal" aria-hidden="true" class="btn btn-info cust_action_btn" id="actionBtn" ng-click="btnSelected('action')">Action</button> </div> </div> </div> </div> </div> </li> </ol> </div> <div><button ng-click="getJson()">Json</button></div> <div>{{json}}</div> </div> <script>var app = angular.module('myApp', []);
+
+    app.controller('MainController', function($scope) {
+      $scope.showModal = false;
+      $scope.buttonClicked = "";
+      $scope.parentId = 0;
+      $scope.thisArray = [];
+      /*demo app*/
+      $scope.json = '';
+        $scope.data = {
+          children: [{
+            title: 'hello, world',
+              children: []
+          }]
+        };
+          
+      $scope.getJson = function () {
+          $scope.json = angular.toJson($scope.data);
+      };
+
+      $scope.clickFun = function(scopee, thisValue){
+        child = scopee;
+        $scope.currentThisValue = event.target;
+        console.log("this value", $scope.currentThisValue);
+      }
+
+      $scope.toggleModal = function(){
+        $scope.buttonClicked = "Select element to add";
+        $scope.showModal = !$scope.showModal;
+      };
+      $scope.btnSelected = function(btnselected){
+        $scope.selectedButton = btnselected;
+        if($scope.selectedButton == "condition"){
+          child.children.push({
+            title: '',
+            children: []
+          },{
+            title: '',
+            children: []
+          });
+          $($scope.currentThisValue).css({
+            'background-color': '#269abc',
+            'height': '50px',
+            'width': '200px',
+            'border-radius': '0px 20px',
+            'font-weight': 'bold',
+            'font-size': '20px'
+          });
+          $($scope.currentThisValue).text("Condition");
+        }else{
+          child.children.push({
+            title: '',
+            children: []
+          });
+          $($scope.currentThisValue).css({
+            'background-color': '#ff1493',
+            'height': '50px',
+            'width': '200px',
+            'border-radius': '20px 20px',
+            'font-weight': 'bold',
+            'font-size': '20px'
+          });
+          $($scope.currentThisValue).text("Action");
+        }
+      };
+
+    });
+
+    /*tree demo directive*/
+    app.directive('yaTree', function () {
+
+      return {
+        restrict: 'A',
+        transclude: 'element',
+        priority: 1000,
+        terminal: true,
+        compile: function (tElement, tAttrs, transclude) {
+
+          var repeatExpr, childExpr, rootExpr, childrenExpr;
+
+          repeatExpr = tAttrs.yaTree.match(/^(.*) in ((?:.*\.)?(.*)) at (.*)$/);
+          childExpr = repeatExpr[1];
+          rootExpr = repeatExpr[2];
+          childrenExpr = repeatExpr[3];
+          branchExpr = repeatExpr[4];
+
+          return function link (scope, element, attrs) {
+
+            var rootElement = element[0].parentNode,
+                cache = [];
+
+            function lookup (child) {
+              var i = cache.length;
+              while (i--) {
+                if (cache[i].scope[childExpr] === child) {
+                  return cache.splice(i, 1)[0];
+                }
+              }
+            }
+
+            scope.$watch(rootExpr, function (root) {
+
+              var currentCache = [];
+
+              (function walk (children, parentNode, parentScope, depth) {
+
+                var i = 0,
+                    n = children.length,
+                    last = n - 1,
+                    cursor,
+                    child,
+                    cached,
+                    childScope,
+                    grandchildren;
+
+                for (; i < n; ++i) {
+
+                  cursor = parentNode.childNodes[i];
+
+                  child = children[i];
+
+                  cached = lookup(child);
+                  
+                  if (cached && cached.parentScope !== parentScope) {
+                    cache.push(cached);
+                    cached = null;
+                  }
+                  
+                  if (!cached) {
+                    transclude(parentScope.$new(), function (clone, childScope) {
+
+                      childScope[childExpr] = child;
+                      
+                      cached = {
+                        scope: childScope,
+                        parentScope: parentScope,
+                        element: clone[0],
+                        branch: clone.find(branchExpr)[0]
+                      };
+
+                      parentNode.insertBefore(cached.element, cursor);
+
+                    });
+                  } else if (cached.element !== cursor) {
+                    parentNode.insertBefore(cached.element, cursor);
+                  }
+
+                  childScope = cached.scope;
+                  childScope.$depth = depth;
+                  childScope.$index = i;
+                  childScope.$first = (i === 0);
+                  childScope.$last = (i === last);
+                  childScope.$middle = !(childScope.$first || childScope.$last);
+
+                  currentCache.push(cached);
+
+                  grandchildren = child[childrenExpr];
+                  if (grandchildren && grandchildren.length) {
+                    walk(grandchildren, cached.branch, childScope, depth + 1);
+                  }
+                }
+              })(root, rootElement, scope, 0);
+
+              cache = currentCache;
+
+            }, true);
+          };
+        }
+      };
+    });</script> </body> </html>
