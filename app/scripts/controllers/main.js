@@ -1,116 +1,151 @@
-// 'use strict';
-var app = angular.module('myapp', ['chart.js', 'rzModule']);
+var app = angular.module('myApp', []);
 
-app.config(function (ChartJsProvider) {
-  ChartJsProvider.setOptions({ 
-    colors : [ '#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'],
-    tooltipFillColor: '#FFF',
-    tooltipFontColor: '#000',
-  });
+app.controller('MainController', function($scope) {
+  $scope.showModal = false;
+  $scope.buttonClicked = "";
+  $scope.json = '';
+    $scope.data = {
+      children: [{
+        title: 'hello, world',
+          children: []
+      }]
+    };
+      
+  $scope.getJson = function () {
+      $scope.json = angular.toJson($scope.data);
+  };
+
+  $scope.clickFun = function(scopee, thisValue){
+    child = scopee;
+    $scope.currentThisValue = event.target;
+    console.log("this value", $scope.currentThisValue);
+  }
+
+  $scope.toggleModal = function(){
+    $scope.buttonClicked = "Select element to add";
+    $scope.showModal = !$scope.showModal;
+  };
+
+  $scope.btnSelected = function(btnselected){
+    $scope.selectedButton = btnselected;
+    if($scope.selectedButton == "condition"){
+      child.children.push({
+        title: '',
+        children: []
+      },{
+        title: '',
+        children: []
+      });
+      $($scope.currentThisValue).css({
+        'background-color': '#4da6ff',
+        'height': '50px',
+        'width': '200px',
+        'border-radius': '0px 20px',
+        'font-weight': 'bold',
+        'font-size': '20px',
+        'font-family': 'Arial, "Helvetica Neue", Helvetica, sans-serif',
+        'border': 'none'
+      });
+      $($scope.currentThisValue).text("Condition");
+    }else{
+      child.children.push({
+        title: '',
+        children: []
+      });
+      $($scope.currentThisValue).css({
+        'background-color': '#CC66FF',
+        'height': '50px',
+        'width': '200px',
+        'border-radius': '30px 30px',
+        'font-weight': 'bold',
+        'font-size': '20px',
+        'font-family': 'Arial, "Helvetica Neue", Helvetica, sans-serif',
+        'border': 'none'
+      });
+      $($scope.currentThisValue).text("Action");
+    }
+  };
 });
 
-var myapp = angular.module('myapp');
+/*tree demo directive*/
+app.directive('yaTree', function () {
 
-myapp.controller("MyController",['$scope', function($scope) {
-  $scope.myvalues = {};
-  $scope.myForm = {}; 
-  $scope.currentDate = false;
-  $scope.currentMonth = false;
-  $scope.multiplierInpt = false;
-  $scope.image = "menuicon.png";
-  $scope.myForm.growth = [
-    {id: "linear", name: "Linear" },
-    {id: "exponential", name: "Exponential" }
-  ];
+  return {
+    restrict: 'A',
+    transclude: 'element',
+    priority: 1000,
+    terminal: true,
+    compile: function (tElement, tAttrs, transclude) {
 
-  $scope.myForm.options = [
-      { id : "3mnths", name: "3 Months" }
-      ,{ id : "6mnths", name: "6 Months" }
-      ,{ id : "12mnths"  , name: "12 Months" }
-  ];
+      var repeatExpr, childExpr, rootExpr, childrenExpr;
 
-  $scope.getCurrentDate = function() {
-    $scope.dateObj = Date();
-    $scope.myForm.current_date = $scope.dateObj.split(" ")[1] + " " + $scope.dateObj.split(" ")[3];
-    $scope.myForm.periodicity = "monthly";
-  };
-  $scope.getCurrentDate();
+      repeatExpr = tAttrs.yaTree.match(/^(.*) in ((?:.*\.)?(.*)) at (.*)$/);
+      childExpr = repeatExpr[1];
+      rootExpr = repeatExpr[2];
+      childrenExpr = repeatExpr[3];
+      branchExpr = repeatExpr[4];
 
-  $scope.priceSlider = 150;
-  $scope.slider = {
-      minValue: 58,
-      maxValue: 90,
-      options: {
-          floor: 0,
-          ceil: 100,
-          step: 1
-      }
-  };
-
-  $scope.labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov","Dec"];
-  // $scope.series = ['Series A', 'Series B'];
-  $scope.data = [
-    [0, 20, 35, 42, 40, 38, 42, 58, 60, 62, 65, 78, 90]
-  ];
-  $scope.onClick = function (points, evt) {
-    console.log(points, evt);
-  };
-  $scope.datasetOverride = [
-    { 
-      // label: $scope.myForm.current_date,
-      fill: true,
-      backgroundColor: "rgba(75,192,192,0.4)",
-      // tooltipFillColor: "rgba(0,0,0,0.8)"
-    }
-  ];
-  $scope.options = {
-    tooltips: {
-      yAlign: 'bottom'
-      // backgroundColor: "#ffffff",
-    },
-    scales: {
-      yAxes: [
-        {
-          id: 'y-axis-2',
-          type: 'linear',
-          display: true,
-          position: 'left'
+      return function link (scope, element, attrs) {
+        var rootElement = element[0].parentNode,
+            cache = [];
+        function lookup (child) {
+          var i = cache.length;
+          while (i--) {
+            if (cache[i].scope[childExpr] === child) {
+              return cache.splice(i, 1)[0];
+            }
+          }
         }
-      ]
+
+        scope.$watch(rootExpr, function (root) {
+          var currentCache = [];
+          (function walk (children, parentNode, parentScope, depth) {
+            var i = 0,
+                n = children.length,
+                last = n - 1,
+                cursor,
+                child,
+                cached,
+                childScope,
+                grandchildren;
+            for (; i < n; ++i) {
+              cursor = parentNode.childNodes[i];
+              child = children[i];
+              cached = lookup(child);
+              if (cached && cached.parentScope !== parentScope) {
+                cache.push(cached);
+                cached = null;
+              }
+              if (!cached) {
+                transclude(parentScope.$new(), function (clone, childScope) {
+                  childScope[childExpr] = child;
+                  cached = {
+                    scope: childScope,
+                    parentScope: parentScope,
+                    element: clone[0],
+                    branch: clone.find(branchExpr)[0]
+                  };
+                  parentNode.insertBefore(cached.element, cursor);
+                });
+              } else if (cached.element !== cursor) {
+                parentNode.insertBefore(cached.element, cursor);
+              }
+              childScope = cached.scope;
+              childScope.$depth = depth;
+              childScope.$index = i;
+              childScope.$first = (i === 0);
+              childScope.$last = (i === last);
+              childScope.$middle = !(childScope.$first || childScope.$last);
+              currentCache.push(cached);
+              grandchildren = child[childrenExpr];
+              if (grandchildren && grandchildren.length) {
+                walk(grandchildren, cached.branch, childScope, depth + 1);
+              }
+            }
+          })(root, rootElement, scope, 0);
+          cache = currentCache;
+        }, true);
+      };
     }
   };
-
-  $scope.onChange = function (gro) {
-    if(gro == "exponential"){
-      $scope.multiplierInpt = true;
-      $scope.myForm.multiplier = "ratio";
-    }else{
-      $scope.multiplierInpt = false;
-    }
-  };
-
-  $scope.onchangeMonth = function (mon){
-    if(mon == "3mnths"){
-      $scope.labels = ["Jan", "Feb", "Mar"];
-    }else if(mon == "6mnths"){
-      $scope.labels = ["Jan", "Feb", "Mar", "Apr", "May", "June"];
-    }else{
-      $scope.labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov","Dec"];
-    }
-  };
-
-  $scope.save = function(mvalues){
-    console.log("My Form values", mvalues);
-    if(mvalues.multiplier == "3mnths"){
-      $scope.labels = ["Jan", "Feb", "Mar"];
-    }else if(mvalues.multiplier == "6mnths"){
-      $scope.labels = ["Jan", "Feb", "Mar", "Apr", "May", "June"];
-    }else{
-      $scope.labels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov","Dec"];
-    }
-    $scope.myvalues = {growth_types_available: mvalues.growth, forecast_months_available: mvalues.options, 
-        current_date: mvalues.current_date, periodicity: mvalues.periodicity, 
-        forecast_months: mvalues.forecast_months, growth_type: mvalues.growth_type
-    }
-  }
-}]);
+});
