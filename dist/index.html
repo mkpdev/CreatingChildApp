@@ -1,23 +1,31 @@
-<!doctype html> <html> <head> <meta charset="utf-8"> <title></title> <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> <!-- external js --> <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> <script type="text/javascript" src="scripts/mainCtrl.js"></script> <link rel="stylesheet" type="text/css" href="styles/main.3cba2cf3.css"> <style>.initial-plus-btn{
+<!doctype html> <html> <head> <meta charset="utf-8"> <title></title> <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> <!-- external js --> <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> <script type="text/javascript" src="scripts/mainCtrl.js"></script> <link rel="stylesheet" type="text/css" href="styles/main.d41d8cd9.css"> <style>.initial-plus-btn{
       text-align: center;
       margin-top: 50px;
     }
     .cust_condition_btn{
+      background-color: #4da6ff;
       height: 80px;
       width: 200px;
       margin-right: 20px;
       margin-bottom: 20px;
       margin-top: 10px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .cust_condition_btn:hover{
+      background-color: #1e90ff;
     }
     .cust_action_btn{
-      background-color: #ff69b4;
+      background-color: #CC66FF;
       height: 80px;
       width: 200px;
       margin-bottom: 20px;
       margin-top: 10px;
+      font-size: 20px;
+      font-weight: bold;
     }
     .cust_action_btn:hover{
-      background-color: #ff1493;
+      background-color: #CC33FF;
     }
     .body-cust_btns{
       text-align: center;
@@ -55,6 +63,13 @@
       font-weight: bold;
       font-size: 20px;
     }
+    .cust-buton-styling{
+      background-color: #3399ff;
+      border: none;
+    }
+    .cust-buton-styling:hover{
+      background-color: #1a8cff;
+    }
 
     /*css for tree structure*/
     .live ol {
@@ -87,7 +102,7 @@
       position: absolute;
       top: 0;
       right: 50%;
-      border-top: 1px solid #ccc;
+      border-top: 2px solid #A8A8A8;
       width: 50%;
       height: 20px;
     }
@@ -95,7 +110,7 @@
     .live li::after {
       right: auto;
       left: 50%;
-      border-left: 1px solid #ccc;
+      border-left: 2px solid #A8A8A8;
     }
     .live li:only-child::after,
     .live li:only-child::before {
@@ -109,7 +124,7 @@
       border: 0 none;
     }
     .live li:last-child::before {
-      border-right: 1px solid #ccc;
+      border-right: 2px solid #A8A8A8;
       border-radius: 0 5px 0 0;
       -webkit-border-radius: 0 5px 0 0;
       -moz-border-radius: 0 5px 0 0;
@@ -124,12 +139,12 @@
       position: absolute;
       top: 0;
       left: 50%;
-      border-left: 1px solid #ccc;
+      border-left: 2px solid #A8A8A8;
       width: 0;
       height: 20px;
     }
     .live li a {
-      border: 1px solid #ccc;
+      border: 2px solid #A8A8A8;
       padding: 5px 10px;
       text-decoration: none;
       color: #666;
@@ -147,14 +162,14 @@
     .live li a:hover+ol li a {
       background: #c8e4f8;
       color: #000;
-      border: 1px solid #94a0b4;
+      border: 2px solid #94a0b4;
     }
     .live li a:hover+ul li::after,
     .live li a:hover+ul li::before,
     .live li a:hover+ul::before,
     .live li a:hover+ul ul::before {
       border-color: #94a0b4;
-    }</style> </head> <body ng-app="myApp"> <div ng-controller="MainController"> <div class="live cust-live"> <ol> <li ya-tree="child in data.children at ol" ng-class="{minimized:child.minimized}"> <div> <button data-toggle="modal" data-target="#myModal" class="btn btn-primary glyphicon" ng-click="clickFun(child, this)">+</button> </div> <ol ng-class="{pregnant:child.children.length}"></ol> <!-- bootstrap model --> <div class="modal fade" id="myModal" role="dialog"> <div class="modal-dialog"> <!-- Modal content--> <div class="modal-content"> <div class="modal-body"> <label class="modal-heading">Select element to add:</label><br> <div class="body-content"> <button type="button" data-dismiss="modal" aria-hidden="true" class="btn btn-info cust_condition_btn" id="condtnBtn" ng-click="btnSelected('condition')">Condition</button> <button type="button" data-dismiss="modal" aria-hidden="true" class="btn btn-info cust_action_btn" id="actionBtn" ng-click="btnSelected('action')">Action</button> </div> </div> </div> </div> </div> </li> </ol> </div> <div><button ng-click="getJson()">Json</button></div> <div>{{json}}</div> </div> <script>var app = angular.module('myApp', []);
+    }</style> </head> <body ng-app="myApp"> <div ng-controller="MainController"> <div class="live cust-live"> <ol> <li ya-tree="child in data.children at ol" ng-class="{minimized:child.minimized}"> <div> <button data-toggle="modal" data-target="#myModal" class="btn btn-primary glyphicon cust-buton-styling" ng-click="clickFun(child, this)">+</button> </div> <ol ng-class="{pregnant:child.children.length}"></ol> <!-- bootstrap model --> <div class="modal fade" id="myModal" role="dialog"> <div class="modal-dialog"> <!-- Modal content--> <div class="modal-content"> <div class="modal-body"> <label class="modal-heading">Select element to add:</label><br> <div class="body-content"> <button type="button" data-dismiss="modal" aria-hidden="true" class="btn btn-info cust_condition_btn" id="condtnBtn" ng-click="btnSelected('condition')">Condition</button> <button type="button" data-dismiss="modal" aria-hidden="true" class="btn btn-info cust_action_btn" id="actionBtn" ng-click="btnSelected('action')">Action</button> </div> </div> </div> </div> </div> </li> </ol> </div> <div><button ng-click="getJson()">Json</button></div> <div>{{json}}</div> </div> <script>var app = angular.module('myApp', []);
 
     app.controller('MainController', function($scope) {
       $scope.showModal = false;
@@ -195,12 +210,14 @@
             children: []
           });
           $($scope.currentThisValue).css({
-            'background-color': '#269abc',
+            'background-color': '#4da6ff',
             'height': '50px',
             'width': '200px',
             'border-radius': '0px 20px',
             'font-weight': 'bold',
-            'font-size': '20px'
+            'font-size': '20px',
+            'font-family': 'Arial, "Helvetica Neue", Helvetica, sans-serif',
+            'border': 'none'
           });
           $($scope.currentThisValue).text("Condition");
         }else{
@@ -209,12 +226,14 @@
             children: []
           });
           $($scope.currentThisValue).css({
-            'background-color': '#ff1493',
+            'background-color': '#CC66FF',
             'height': '50px',
             'width': '200px',
-            'border-radius': '20px 20px',
+            'border-radius': '30px 30px',
             'font-weight': 'bold',
-            'font-size': '20px'
+            'font-size': '20px',
+            'font-family': 'Arial, "Helvetica Neue", Helvetica, sans-serif',
+            'border': 'none'
           });
           $($scope.currentThisValue).text("Action");
         }
